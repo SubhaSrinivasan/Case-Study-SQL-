@@ -1,0 +1,62 @@
+Scenario:      
+Design a database to manage a retail store's inventory, suppliers, and sales.
+
+create database RetailDB;
+use RetailDB;
+
+1) create table products and insert values in table
+
+create table products(  
+id int primary key auto_increment,
+name VARCHAR(50) Not Null,
+price DECIMAL(10, 2) Not Null Check (Price > 0),
+stock int  Not Null, Check (Stock >= 0));
+insert into products(name, price, stock)values('Product A', 19.99, 100),
+('Product B', 29.95, 50),
+('Product C', 9.99, 200),
+('Product D', 49.99, 30),
+('Product E', 15.50, 5);
+
+2)create table suppliers and insert values in table
+
+create table suppliers(
+id int primary key auto_increment,
+name varchar(100) not null,
+contact varchar(10));
+insert into suppliers (name, contact) values('joe', '7856091230'),
+('david', '8956012354'),
+('jessy', '7923651302'),
+('kemi', '7322194376'),
+('kiki', '9923774451');
+
+3)create table sales and insert values in table
+
+create table sales(
+id int primary key auto_increment,
+product_id int,foreign key(product_id) references products(id),
+date date not null,
+quantity int not null check(quantity>0),
+total_price decimal(10,2) not null);
+insert into sales (product_id, date, quantity, total_price)values(1, '2024-11-01', 2, 39.98),
+(2, '2024-11-05', 1, 100),
+(3, '2024-11-10', 5, 1001),
+(4, '2024-11-12', 3, 50.45),
+(5, '2024-11-15', 4, 62.00);
+select * from sales;
+
+#4(1), List all products.
+#Query,used to select data from a database.
+select * from products;
+
+#4(2), Show products with stock less than 10.
+#Query,here we use where condition to find the stocks which are less than 10 from table.
+select products.name,products.stock from products where products.stock<10;
+
+#4(3),List sales with product names and total prices.
+#Query,
+select products.id,products.name,sales.total_price from products join sales where sales.product_id=products.id;
+
+#4(4),Calculate the total sales for each product.
+#Query,
+select sales.product_id,products.name as product_name ,count(sales.total_price) as total_sales from sales 
+join products on sales.product_id=products.id group by sales.product_id;
