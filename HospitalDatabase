@@ -1,0 +1,71 @@
+Scenario:      
+Create a database to manage patients, doctors, and appointments in a hospital.
+
+create database HospitalDB;
+use hospitalDB;
+1)create table patients and insert values in table.
+
+create table  patients(
+id int primary key auto_increment,
+name varchar(50) not null,
+age int not null,
+gender varchar(50),
+contact varchar(10));
+insert into patients(name,age,gender,contact) values
+('John', 30, 'Male', '9845612365'),
+('Smith', 25, 'Female', '7344127869'),
+('Alice', 40, 'Female', '9956749921'),
+('Bob', 35, 'Male', '6231468020'),
+('Charlie', 50, 'Male', '9790216505'),
+('jeni', 45, 'Female','8775462380');
+
+2)create table doctors and insert values in table.
+
+create table doctors(
+id int primary key auto_increment,
+name varchar(50) not null,
+specialization varchar(100) not null);
+insert into doctors values
+(101,'Dr. Sarah Lee', 'Cardiologist'),
+(102,'Dr. James White', 'Neurologist'),
+(103,'Dr. Emily Harris', 'Orthopedic Surgeon'),
+(104,'Dr. Michael Clark', 'Pediatrician'),
+(105,'Dr. Linda Kim', 'Dermatologist'),
+(106,'Dr. David Miller', 'General Practitioner');
+select * from doctors;
+
+3)create table appointments and insert values in table.
+
+create table appointments(
+id int primary key auto_increment,
+patient_id int,foreign key(patient_id) references patients(id),
+doctor_id int,foreign key(doctor_id) references doctors(id),
+appointment_date date not null,
+ status enum('scheduled','completed','cancelled'));
+insert into appointments (patient_id, doctor_id, appointment_date, status) values
+(1, 101,'2024-11-25','scheduled'),
+(2, 103,'2024-11-26','completed'),
+(3, 102,'2024-11-27','scheduled'),
+(4, 104,'2024-11-28','cancelled'),
+(5, 105,'2024-11-29','scheduled'),
+(6, 106,'2024-11-30','completed');
+
+#4(1),List all patients.
+#query,
+select * from patients;
+
+#4(2),List all doctors.
+#query,
+select * from doctors;
+
+#4(3),Show appointments with patient and doctor names.
+#query,
+select appointments.patient_id,appointments.doctor_id,appointments.appointment_date,doctors.name from appointments 
+join doctors on appointments.doctor_id=doctors.id;
+ 
+#4(4),Count appointments per doctor.
+#query,
+select appointments.doctor_id,doctors.name,count(appointments.id)as total_appointments from appointments
+join doctors on appointments.doctor_id=doctors.id group by appointments.doctor_id, doctors.name;
+
+ 
