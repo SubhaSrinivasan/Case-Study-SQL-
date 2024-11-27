@@ -1,0 +1,71 @@
+Scenario:      
+You are tasked with creating a database to manage a library's inventory, members, and borrowing records. 
+
+create database LibraryDB;
+use LibraryDB;
+
+1)create table books and insert values in table.
+create table books(
+id int primary key auto_increment,
+title varchar(100) not null,
+author varchar(100) not null,
+published_year year not null,
+genre varchar(50));
+insert into books values(110,'Harry Potter','J.K. Rowling',1997,'fantasy');
+insert into books values(111,'The Lord of the Rings', 'J.R.R. Tolkien', 1954, 'Fantasy, Adventure');
+insert into books values(112,'The Chronicles of Narnia', 'C.S. Lewis', 1950, 'Fantasy, Children’s Fiction');
+insert into books values(114,'Pride and Prejudice', 'Jane Austen',1913, 'Romance, Classic');
+insert into books values(115,'The Catcher in the Rye', 'J.D. Salinger', 1951, 'Coming-of-Age, Fiction');
+select * from books;
+
+2)create table members and insert values in table.
+create table members(
+id int primary key auto_increment,
+name varchar(100) not null,
+membership_date date not null);
+insert into members (name,membership_date)values('john','2024-01-10');
+insert into members (name,membership_date)values('smith','2024-05-01');
+insert into members (name,membership_date)values('kavi','2024-10-10');
+insert into members (name,membership_date)values('grace','2024-11-19');
+insert into members (name,membership_date)values('jessy','2024-08-05');
+
+3)create table borrowing and insert values in table.
+create table borrowing(
+id int primary key auto_increment,
+book_id int,foreign key (book_id) references books(id),
+member_id int,foreign key(member_id) references members(id),
+borrow_date date not null,
+return_date date not null);
+insert into borrowing(book_id,member_id,borrow_date,return_date) 
+values(114,1,'2024-02-25','2024-03-15'),
+(111,5,'2024-05-01','2024-07-23'),
+(115,4,'2024-06-18','2024-09-01'),
+(110,3,'2024-09-11','2024-10-10'),
+(112,2,'2024-03-05','2024-04-15');
+
+#4(1), List all books.
+#Query
+select * from books;
+
+#4(2),List all members.
+#Query
+select * from members;
+
+#4(3),Show borrowing records with member names and book titles.
+#Query
+select members.name as member_name, books.title as book_title from borrowing 
+join members on borrowing.member_id = members.id join books on borrowing.book_id = books.id;
+
+#(4),Count the number of books borrowed by each member.
+#Query
+select members.name as member_name,count(borrowing.book_id) AS books_borrowed from borrowing 
+join members on borrowing.member_id=members.id group by members.name;
+
+
+
+
+
+
+
+
+
