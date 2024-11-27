@@ -1,0 +1,68 @@
+Scenario:      
+  Create a database to manage students, their courses, and grades.
+
+1) create table students and insert values in table.
+
+create database StudentDB;
+use StudentDB;
+create table students(
+id int primary key auto_increment,
+name varchar(50) not null,
+age int not null,
+email varchar(100) not null unique);
+
+insert into students values(101,'dev',18,'dev123@gmail.com');
+insert into students values(102,'kavi',17,'kavi12@gmail.com');
+insert into students values(106,'pavi',18,'pavi2003@gmail.com');
+insert into students values(112,'naveen',17,'naveenrock@gmail.com');
+insert into students values(115,'john',18,'john@gmail.com');
+insert into students values(118,'paul',18,'paul03@gmail.com');
+insert into students values(120,'paven',18,'paven16@gmail.com');
+insert into students values(122,'nila',17,'nila12@gmail.com');
+
+2)create table courses and insert values in table.
+
+create table courses(
+id int primary key auto_increment,
+name varchar(100) not null);
+insert into courses(name) values ('Computer Science'),
+('Data SCience'),
+('B.Com'),
+('B.A');
+
+3)create table enrollments and insert values in table.
+
+create table enrollments(
+student_id int,foreign key(student_id) references students(id),
+course_id int,foreign key(course_id) references courses(id),
+grade char(10),  
+primary key (student_id,course_id));
+insert into enrollments (student_id, course_id, grade)values 
+(101,1,'A'),
+(102,3,'B'),
+(106,2,'C'),
+(118,4,'B+'),
+(120,1,'A-'),
+(122,3,'B'),
+(115,4,'C'),
+(112,2,'B+');
+
+#4(1),List all students.
+
+#Query,used to select data from a database.
+select * from students;
+
+#4(2),List all courses.
+select * from courses;
+
+#4(3),Show the names of students and the courses they are enrolled in.
+Query,to list students name with their course name,here join have to combine a tables
+
+select students.id,students.name,courses.name as course_name from students join enrollments on students.id=enrollments.student_id
+join courses on enrollments.course_id=courses.id;
+ 
+#4(4),Count the number of students in each course.
+Query,statement often used with aggregate functions (COUNT, MAX, MIN, SUM, AVG) to group the result-set by one or more columns.here we counting the number of students in each course.
+
+SELECT enrollments.course_id, COUNT(enrollments.student_id) AS student_count FROM enrollments
+GROUP BY enrollments.course_id;
