@@ -1,0 +1,77 @@
+Scenario:      
+Design a database for an online learning platform to manage courses, instructors, and student enrollments.
+
+create database LearningDB;
+use LearningDB;
+
+1)create table courses and insert values in table.
+create table courses(
+id int primary key auto_increment,
+title varchar(100) not null,
+description text);
+insert into courses (title, description) values
+('Introduction to Programming', 'Learn the basics of programming using Python. This course covers variables, loops, conditionals, and functions.'),
+('Database Management Systems', 'An in-depth course on database design, normalization, SQL queries, and relational databases.'),
+('Web Development', 'A comprehensive course covering HTML, CSS, JavaScript, and front-end development frameworks like React.'),
+('Data Science with R', 'This course introduces the field of data science, covering data cleaning, analysis, and visualization using R.'),
+('Machine Learning Basics', 'Learn the fundamentals of machine learning, including algorithms like decision trees, linear regression, and clustering.');
+
+2)create table instructors and insert values in table.
+create table instructors(
+id int primary key auto_increment,
+name varchar(100) not null,
+expertise varchar(100) not null);
+insert into instructors (name, expertise) values
+('Dr. John Smith', 'Computer Science'),
+('Prof. Emily Johnson', 'Mathematics'),
+('Dr. Sarah Lee', 'Data Science'),
+('Dr. James White', 'Physics'),
+('Prof. Linda Kim', 'Engineering');
+
+3)create table students and insert values in table.
+create table students(
+id int primary key auto_increment,
+name varchar(50) not null,
+email varchar(100) not null unique);
+insert into students values(101,'dev','dev123@gmail.com');
+insert into students values(102,'kavi','kavi12@gmail.com');
+insert into students values(106,'pavi','pavi2003@gmail.com');
+insert into students values(112,'naveen','naveenrock@gmail.com');
+insert into students values(115,'john','john@gmail.com');
+insert into students values(118,'paul','paul03@gmail.com');
+insert into students values(120,'paven','paven16@gmail.com');
+insert into students values(122,'nila','nila12@gmail.com');
+
+4)create table enrollments and insert values in table.
+create table enrollments(
+student_id int, foreign key(student_id) references students(id),
+course_id int,foreign key(course_id) references courses(id),
+enrollment_date date not null,
+primary key (student_id,course_id));
+insert into enrollments (student_id, course_id, enrollment_date) values
+(101, 1, '2024-09-01'),  
+(102, 2, '2024-09-02'),  
+(106, 3, '2024-09-03'),  
+(112, 4, '2024-09-04'),  
+(115, 5, '2024-09-05'),  
+(118, 2, '2024-09-06'), 
+(120, 3, '2024-09-07'), 
+(122, 4, '2024-09-08'); 
+
+#4(1),List all courses.
+#Query,
+select * from courses;
+
+#4(2),List all instructors.
+#Query,
+select * from instructors;
+
+#4(3),Show enrollments with student names and course titles.
+#Query,
+select students.id,students.name,courses.title from students join enrollments on students.id=enrollments.student_id
+join courses on enrollments.course_id=courses.id;
+ 
+ #4(4),Count the number of students enrolled in each course.
+#Query,
+select enrollments.course_id,courses.title,COUNT(enrollments.student_id) as student_count from enrollments 
+join courses on enrollments.course_id=courses.id group by enrollments.course_id;
